@@ -1,0 +1,27 @@
+title 0.6: Uusi muistiinpano
+
+note over Browser
+User adds a new note
+and clicks the Save-button
+end note
+
+Browser->Server: POST: https://fullstack-exampleapp.herokuapp.com/new_note_spa
+
+note right of Server
+Content type of posted data is
+defined to "application/json". 
+end note
+
+note right of Server
+Server handle post request and respond with 
+status code 201 (created) and 
+response message
+end note
+
+
+Server-->Browser: Server response {"message":"note created"}
+
+note over Browser
+User will see updated list of notes 
+end note
+

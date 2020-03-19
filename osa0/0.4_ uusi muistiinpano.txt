@@ -1,0 +1,32 @@
+title 0.4: uusi muistiinpano
+
+note over Browser
+User adds a new note
+and clicks the Save-button
+end note
+
+Browser->Server: HTTP POST: https://fullstack-exampleapp.herokuapp.com/new_note
+
+note over Server
+Server handles post request and
+user will be redirect to /notes -page
+end note
+
+Browser->Server: HTTP GET: https://fullstack-exampleapp.herokuapp.com/notes
+Server-->Browser: HTML skeleton
+Browser->Server: HTTP GET: https://fullstack-exampleapp.herokuapp.com/main.css
+Server-->Browser: main.css
+Browser->Server: HTTP GET: https://fullstack-exampleapp.herokuapp.com/main.js
+Server-->Browser: main.js
+
+note over Browser
+Browser operates .js code, which requests 
+json data from server
+end note 
+
+Server->Browser: HTTP GET: https://fullstack-exampleapp.herokuapp.com/data.json
+Browser-->Server: Updated notes as a JSON data
+
+note over Browser
+Eventhandler render rest of page content
+end note 
