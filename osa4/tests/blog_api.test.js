@@ -38,12 +38,41 @@ describe('get blogs', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
+  test('blogs length matches to length of blogsForTesting', async () => {
+    const blogs = await Blog.find({})
+    expect(blogs.length).toBe(blogsForTesting.length)
+  })
   test('look for specific title', async () => {
     const response = await api.get('/api/blogs')
     const blogs = response.body.map(r => r.title)
     expect(blogs).toContain(blogsForTesting[1].title)
   })
-  
+  test('make sure _id is corrected to id', async () => {
+    const response = await api.get('/api/blogs')
+    response.body.forEach(item => {
+      const idAsKey = Object.keys(item).find(item => item === 'id')
+      expect(idAsKey).toBeDefined()
+    });
+  })
+})
+
+describe('addition of new blogs', () => {
+  test('new blogs can be added and the number of blogs increases', async () => {
+    const newBlog = {
+      title: "Testing addition of new blog",
+      author: "Blog Api Tester",
+      url: "",
+      likes: 99
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+    
+    const blogs = await api.get('/api/blogs')
+    expect(blogs.body.length).toBe(blogsForTesting.length + 1)
+  })
 })
 
 afterAll(() => {
