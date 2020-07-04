@@ -61,7 +61,7 @@ describe('addition of new blogs', () => {
     const newBlog = {
       title: "Testing addition of new blog",
       author: "Blog Api Tester",
-      url: "",
+      url: "www",
       likes: 99
     }
 
@@ -72,6 +72,33 @@ describe('addition of new blogs', () => {
     
     const blogs = await api.get('/api/blogs')
     expect(blogs.body.length).toBe(blogsForTesting.length + 1)
+  })
+  test('adding new blog w/o likes returns 0', async () => {
+    const newBlog = {
+      title: "A new blog with 0 likes",
+      author: "Blog Api Tester",
+      url: "www"
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+    
+    const blogs = await api.get('/api/blogs')
+    const likes = blogs.body.map(b => b.likes)
+    const newest = likes[blogsForTesting.length]
+    expect(newest).toBe(0)
+  })
+  test('adding new blog w/o title and/or url returns 400 bad request', async () => {
+    const newBlog = {
+      author: "Blog Api Tester"
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
   })
 })
 
