@@ -1,2 +1,4 @@
-# fullstackopen
-private repository for fullstack2020
+# Full stack open 2020
+Deep Dive Into Modern Web Development
+
+https://fullstackopen.com
