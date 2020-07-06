@@ -113,6 +113,19 @@ describe('remove blogs', () => {
     expect(blogsAfter.body.length).toBe(blogsForTesting.length - 1)
   })
 })
+describe('update blogs', () => {
+  test('update blog by id', async () => {
+    let blog = await Blog.findOne({})
+    
+    await api
+      .put(`/api/blogs/${blog.id}`)
+      .send({ "likes": blog.likes + 1 })
+      .expect(200)
+
+    const blogAfter = await Blog.findById(blog.id)
+    expect(blogAfter.likes).toBe(blog.likes + 1)
+  })
+})
 
 afterAll(() => {
   mongoose.connection.close()
