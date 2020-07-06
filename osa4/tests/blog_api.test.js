@@ -101,6 +101,18 @@ describe('addition of new blogs', () => {
       .expect(400)
   })
 })
+describe('remove blogs', () => {
+  test('remove blog by id', async () => {
+    const blogs = await api.get('/api/blogs')
+    
+    await api
+      .delete(`/api/blogs/${blogs.body[0].id}`)
+      .expect(204)
+
+    const blogsAfter = await api.get('/api/blogs')
+    expect(blogsAfter.body.length).toBe(blogsForTesting.length - 1)
+  })
+})
 
 afterAll(() => {
   mongoose.connection.close()
