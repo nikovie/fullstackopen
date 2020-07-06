@@ -68,7 +68,7 @@ describe('addition of new blogs', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
-      .expect(201)
+      .expect(200)
     
     const blogs = await api.get('/api/blogs')
     expect(blogs.body.length).toBe(blogsForTesting.length + 1)
@@ -83,7 +83,7 @@ describe('addition of new blogs', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
-      .expect(201)
+      .expect(200)
     
     const blogs = await api.get('/api/blogs')
     const likes = blogs.body.map(b => b.likes)
