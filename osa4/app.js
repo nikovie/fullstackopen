@@ -7,7 +7,7 @@ const userRouter = require('./controllers/users')
 const middleware = require('./utils/middleware')
 const mongoose = require('mongoose')
 
-mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(config.MONGODB_URI, { useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true})
 
 app.use(cors())
 app.use(express.json())
