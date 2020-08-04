@@ -54,29 +54,35 @@ const App = () => {
       setPassword('')
     }
     catch (exception) {
-      notifyWith('Wrong credentials', 'error')
+      notifyWith(`Oops, ${exception.response.data.error}`, 'error')
     }
   }
 
   const handleLogout = () => {
     window.localStorage.clear()
     setUser(null)
+    notifyWith('Logged out successfully')
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
 
-    try {
-      await blogService
-        .create({
-          title: title,
-          author: author,
-          url: url
-        })
-    }
-    catch (exception) {
-      notifyWith('Something went wrong...', 'error')
-    }
+    blogService
+      .create({
+        title: title,
+        author: author,
+        url: url
+      })
+      .then(response => {
+        setBlogs(blogs.concat(response))
+        notifyWith(`A new blog ${title} has been added`)
+        setTitle('')
+        setAuthor('')
+        setUrl('')
+      })
+      .catch(exception => {
+        notifyWith(`Oops, ${exception.response.data.error}`, 'error')
+      })
   }
 
   const loginForm = () => (
