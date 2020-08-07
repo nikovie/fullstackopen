@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notication'
+import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -10,9 +12,8 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -64,25 +65,17 @@ const App = () => {
     notifyWith('Logged out successfully')
   }
 
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-
+  const addBlog = (blogObject) => {
     blogService
-      .create({
-        title: title,
-        author: author,
-        url: url
-      })
+      .create(blogObject)
       .then(response => {
         setBlogs(blogs.concat(response))
-        notifyWith(`A new blog ${title} has been added`)
-        setTitle('')
-        setAuthor('')
-        setUrl('')
+        notifyWith(`A new blog ${response.title} has been added`)
+        blogFormRef.current.toggleVisibility()
       })
       .catch(exception => {
         notifyWith(`Oops, ${exception.response.data.error}`, 'error')
-      })
+      })    
   }
 
   const loginForm = () => (
@@ -120,39 +113,9 @@ const App = () => {
   )
 
   const blogForm = () => (
-    <>
-      <h2>Add new</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          Title: 
-          <input
-            type="text"
-            value={title}
-            name="title"
-            onChange={({target}) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-          Author: 
-          <input
-            type="text"
-            value={author}
-            name="author"
-            onChange={({target}) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
-          Url: 
-          <input
-            type="text"
-            value={url}
-            name="url"
-            onChange={({target}) => setUrl(target.value)}
-          />
-        </div>
-        <button type="submit">Add blog</button>
-      </form>
-    </>
+    <Togglable label="Add new blog" ref={blogFormRef}>
+      <BlogForm addNewBlog={addBlog}/>
+    </Togglable>
   )
 
   return (
