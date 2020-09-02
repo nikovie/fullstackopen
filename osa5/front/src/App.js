@@ -78,6 +78,25 @@ const App = () => {
       })    
   }
 
+  const likeBlog = (blogObject) => {
+    const updateBlog = {
+      user: blogObject.user.id,
+      likes: blogObject.likes,
+      author: blogObject.author,
+      title: blogObject.title,
+      url: blogObject.url
+    }
+    
+    blogService
+      .update(blogObject.id, updateBlog)
+      .then(response => {
+        notifyWith(`Added +1 to ${response.title}`)
+      })
+      .catch(exception => {
+        notifyWith(`Oops, ${exception.response.data.error}`, 'error')
+      })    
+  }
+
   const loginForm = () => (
     <>
     <form onSubmit={handleLogin}>
@@ -107,7 +126,7 @@ const App = () => {
   const blogList = () => (
     <div className="mt2">
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />
       )}
     </div>
   )
