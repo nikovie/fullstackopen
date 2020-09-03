@@ -97,6 +97,19 @@ const App = () => {
       })    
   }
 
+  const removeBlog = (title, id) => {
+    if (window.confirm(`Are you sure to delete ${title}`)) {
+      blogService
+        .remove(id)
+        .then(notifyWith(`Blog removed`))
+        .catch(exception => {
+          console.log('err', exception.response.data.error)
+          notifyWith(`Oops, ${exception.response.data.error}`, 'error')
+        })
+    }
+    
+  }
+
   const loginForm = () => (
     <>
     <form onSubmit={handleLogin}>
@@ -128,7 +141,7 @@ const App = () => {
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map(blog =>
-          <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />
+          <Blog key={blog.id} blog={blog} likeBlog={likeBlog} removeBlog={removeBlog} user={user} />
         )
       }
     </div>

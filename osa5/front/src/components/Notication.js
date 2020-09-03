@@ -15,6 +15,7 @@ const Notification = ({notification}) => {
 
   return (
     <div className={`${defaultCss} ${notification.type}`}>
+      {window.scrollTo(0, 0)}
       {notification.message}
     </div>
   )

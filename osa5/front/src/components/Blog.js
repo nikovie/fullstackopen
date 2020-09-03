@@ -2,10 +2,14 @@ import React, {useState} from 'react'
 import Togglable from './Togglable'
 import blogs from '../services/blogs'
 
-const Blog = ({ blog, likeBlog }) => {
+const Blog = ({ blog, likeBlog, removeBlog, user }) => {
   const handleLike = () => {
     blogs.likes === null ? blog.likes=0 : blog.likes++
     likeBlog(blog)
+  }
+
+  const handleRemove = () => {
+    removeBlog(blog.title, blog.id)
   }
 
   return (
@@ -18,8 +22,9 @@ const Blog = ({ blog, likeBlog }) => {
         <div>{blog.url}</div>
         <div>
           Likes: {blog.likes === null ? 0 : `${blog.likes}`}
-          <button onClick={() => handleLike()}>Like</button>
+          <button onClick={handleLike}>Like</button>
         </div>
+        {blog.user.username === user.username && <button className="fr" onClick={handleRemove}>Remove</button>}
       </Togglable>
     </div>
   )
