@@ -125,9 +125,12 @@ const App = () => {
   
   const blogList = () => (
     <div className="mt2">
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />
-      )}
+      {blogs
+        .sort((a, b) => b.likes - a.likes)
+        .map(blog =>
+          <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />
+        )
+      }
     </div>
   )
 
