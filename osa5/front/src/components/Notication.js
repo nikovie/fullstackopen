@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Notification = ({notification}) => {
+const Notification = ({ notification }) => {
   const defaultCss = 'ma2 pa2 bw2 b--solid'
-  
+
   if (notification === null) {
     return null
   }
@@ -12,7 +12,7 @@ const Notification = ({notification}) => {
     notification.type = 'b--red'
   } else if  (notification.type === 'success') {
     notification.type = 'b--green'
-  } 
+  }
 
   return (
     <div className={`${defaultCss} ${notification.type}`}>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 const BlogForm = ({ addNewBlog }) => {
@@ -10,11 +10,11 @@ const BlogForm = ({ addNewBlog }) => {
     event.preventDefault()
 
     addNewBlog({
-      title: title, 
+      title: title,
       author: author,
       url: url
     })
-    
+
     setTitle('')
     setAuthor('')
     setUrl('')
@@ -23,36 +23,36 @@ const BlogForm = ({ addNewBlog }) => {
   return (
     <div>
       <h2>Add new</h2>
-        <form onSubmit={addBlog}>
-          <div>
-            Title: 
-            <input
-              type="text"
-              value={title}
-              name="title"
-              onChange={({target}) => setTitle(target.value)}
-            />
-          </div>
-          <div>
-            Author: 
-            <input
-              type="text"
-              value={author}
-              name="author"
-              onChange={({target}) => setAuthor(target.value)}
-            />
-          </div>
-          <div>
-            Url: 
-            <input
-              type="text"
-              value={url}
-              name="url"
-              onChange={({target}) => setUrl(target.value)}
-            />
-          </div>
-          <button type="submit">Add blog</button>
-        </form>
+      <form onSubmit={addBlog}>
+        <div>
+          Title:
+          <input
+            type="text"
+            value={title}
+            name="title"
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </div>
+        <div>
+          Author:
+          <input
+            type="text"
+            value={author}
+            name="author"
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </div>
+        <div>
+          Url:
+          <input
+            type="text"
+            value={url}
+            name="url"
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </div>
+        <button type="submit">Add blog</button>
+      </form>
     </div>
   )
 }

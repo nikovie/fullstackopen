@@ -17,7 +17,7 @@ const Blog = ({ blog, likeBlog, removeBlog, user }) => {
     <div className="mb2 ph1 pv2 b--solid b--gray">
       <div>
         {blog.title}
-        <i> by {blog.author}</i> 
+        <i> by {blog.author}</i>
       </div>
       <Togglable showLabel="view">
         <div>{blog.url}</div>

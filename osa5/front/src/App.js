@@ -18,7 +18,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const App = () => {
       window.localStorage.setItem(
         'loggedUser', JSON.stringify(user)
       )
-      
+
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
@@ -75,7 +75,7 @@ const App = () => {
       })
       .catch(exception => {
         notifyWith(`Oops, ${exception.response.data.error}`, 'error')
-      })    
+      })
   }
 
   const likeBlog = (blogObject) => {
@@ -86,7 +86,7 @@ const App = () => {
       title: blogObject.title,
       url: blogObject.url
     }
-    
+
     blogService
       .update(blogObject.id, updateBlog)
       .then(response => {
@@ -94,48 +94,47 @@ const App = () => {
       })
       .catch(exception => {
         notifyWith(`Oops, ${exception.response.data.error}`, 'error')
-      })    
+      })
   }
 
   const removeBlog = (title, id) => {
     if (window.confirm(`Are you sure to delete ${title}`)) {
       blogService
         .remove(id)
-        .then(notifyWith(`Blog removed`))
+        .then(notifyWith('Blog removed'))
         .catch(exception => {
           console.log('err', exception.response.data.error)
           notifyWith(`Oops, ${exception.response.data.error}`, 'error')
         })
     }
-    
   }
 
   const loginForm = () => (
     <>
-    <form onSubmit={handleLogin}>
-      <div>
-        Username: 
-        <input 
-          type="text"
-          value={username}
-          name="username"
-          onChange={({target}) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        Password: 
-        <input 
-          type="password"
-          value={password}
-          name="password"
-          onChange={({target}) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">Login</button>
-    </form>
+      <form onSubmit={handleLogin}>
+        <div>
+          Username:
+          <input
+            type="text"
+            value={username}
+            name="username"
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </div>
+        <div>
+          Password:
+          <input
+            type="password"
+            value={password}
+            name="password"
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button type="submit">Login</button>
+      </form>
     </>
   )
-  
+
   const blogList = () => (
     <div className="mt2">
       {blogs
@@ -160,7 +159,7 @@ const App = () => {
           <h1>Blogs</h1>
         </div>
         <div className="dib fr">
-          {user !== null && 
+          {user !== null &&
             <p>{user.name} logged in <button onClick={() => handleLogout()}>logout</button></p>
           }
         </div>
