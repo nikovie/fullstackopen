@@ -111,7 +111,7 @@ const App = () => {
 
   const loginForm = () => (
     <>
-      <form onSubmit={handleLogin}>
+      <form id="loginForm" onSubmit={handleLogin}>
         <div>
           Username:
           <input
