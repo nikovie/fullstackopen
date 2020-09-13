@@ -35,25 +35,65 @@ describe('Blog app', function() {
     })
   })
 
-  describe.only('When logged in', function() {
+  describe('When logged in', function() {
+    const blogs = [
+      { title: 'Bob\'s blog', author: 'Bob the Bot', url: 'www.fi' },
+      { title: 'Another blog', author: 'Someone Else', url: 'www.fi' }
+    ]
+
     beforeEach(function() {
-      cy.get('form#loginForm').within(function() {
-        cy.get('input[name=username]').type('bob')
-        cy.get('input[name=password]').type('thebot')
-        cy.get('button').contains('Login').click()
-      })
+      cy.login()
+      cy.visit('http://localhost:3000')
     })
 
     it('A blog can be created', function() {
-      cy.contains('Add new blog').click()
-      cy.get('form').within(function() {
-        cy.get('#title').type('Bob\'s blog')
-        cy.get('#author').type('Bob the Bot')
-        cy.get('#url').type('www.fi')
-        cy.get('button').contains('Add blog').click()
-      })
-      cy.contains('A new blog Bob\'s blog has been added')
-      cy.get('#blogList').contains('Bob\'s blog by Bob the Bot')
+      cy.createBlog(blogs[0])
+      cy.createBlog(blogs[1])
+      cy
+        .visit('http://localhost:3000')
+        .get('#blogList > div')
+        .should(($blog) => {
+          expect($blog).to.have.length(2)
+          expect($blog.eq(0)).to.contain('Bob\'s blog by Bob the Bot')
+          expect($blog.eq(1)).to.contain('Another blog by Someone Else')
+        })
+        
+    })
+
+    it('User can like blogs and most liked are shown on top', function() {
+      cy.createBlog(blogs[0])
+      cy.createBlog(blogs[1])
+      cy
+        .visit('http://localhost:3000')
+        .get('#blogList > div')
+        .eq(1)
+        .contains('view')
+        .click()
+      cy.get('button')
+        .contains('Like')
+        .click()
+      cy
+        .get('#blogList > div')
+        .should(($blog) => {
+          expect($blog).to.have.length(2)
+          expect($blog.eq(0)).to.contain('Another blog by Someone Else')
+          expect($blog.eq(1)).to.contain('Bob\'s blog by Bob the Bot')
+        })
+    })
+
+    it('User can remove blogs', function() {
+      cy.createBlog(blogs[0])
+      cy.createBlog(blogs[1])
+      cy
+        .visit('http://localhost:3000')
+        .get('#blogList > div')
+        .eq(0)
+        .contains('view')
+        .click()
+      cy.get('button')
+        .contains('Remove')
+        .click()
+      cy.contains('Blog removed')
     })
   })
 
