@@ -5,6 +5,7 @@ import { notifyOfVote, notificationTimeout } from '../reducers/notificationReduc
 
 const AnecdoteList = () => {
   const anecdotes = useSelector(state => state.anecdotes)
+  const filterValue = useSelector(state => state.filter)
   const dispatch = useDispatch()
 
   const vote = (id, content) => {
@@ -15,9 +16,17 @@ const AnecdoteList = () => {
     }, 5000)
   }
 
+  const filterAnecdotes = (anecdotes, filterValue) => {
+    return anecdotes.filter(
+      anecdotes => anecdotes.content.toLowerCase()
+      .includes(filterValue.toLowerCase())
+    )
+  }
+
   return (
-    <div style={{marginTop: 2 + 'em'}}>
-      {anecdotes.map(anecdote =>
+    <div style={{marginTop: 1 + 'em'}}>
+      {filterAnecdotes(anecdotes, filterValue)
+        .map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
