@@ -31,14 +31,10 @@ export const addVote = (id) => {
   }
 }
 
-export const addNewAnecdote = (content) => {
+export const addNewAnecdote = (data) => {
   return {
     type: 'ADD_NEW',
-    data: { 
-      content,
-      id: getId(),
-      votes: 0
-    }
+    data
   }
 }
 
