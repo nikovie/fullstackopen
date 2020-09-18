@@ -1,11 +1,8 @@
 const notificationReducer = (state = null, action) => {
   
   switch(action.type) {
-    case 'NEW_CONTENT':
-      return `A new anecdote "${action.content}" has been added`
-
-    case 'VOTE':
-      return `You voted "${action.content}"`
+    case 'SET_NOTIFICATION': 
+      return action.content
 
     case 'RESET':
       return action.reset
@@ -15,17 +12,15 @@ const notificationReducer = (state = null, action) => {
   }
 }
 
-export const notifyOfNew = (content) => {
-  return {
-    type: 'NEW_CONTENT',
-    content
-  }
-}
-
-export const notifyOfVote = (content) => {
-  return {
-    type: 'VOTE',
-    content
+export const setNotification = (message, timeout) => {
+  return async dispatch => {
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      content: message
+    })
+    setTimeout(() => {
+      dispatch(notificationTimeout())
+    }, timeout*1000)
   }
 }
 
