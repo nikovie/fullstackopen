@@ -6,6 +6,7 @@ import {
 import AnecdoteList from './components/pages/AnecdoteList'
 import About from './components/pages/About'
 import CreateNew from './components/pages/CreateNew'
+import Anecdote from './components/pages/Anecdote'
 import Menu from './components/Menu'
 import Footer from './components/Footer'
 
@@ -53,6 +54,9 @@ const App = () => {
       <h1>Software anecdotes</h1>
       <Menu />
       <Switch>
+        <Route path="/anecdote/:id">
+          <Anecdote list={anecdotes} />
+        </Route>
         <Route path="/about">
           <About />
         </Route>
