@@ -33,6 +33,10 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`A new anecdote "${anecdote.content}" has been added`)
+    setTimeout(() => {
+      setNotification(null)
+    }, 10000)
   }
 
   const anecdoteById = (id) =>
@@ -49,10 +53,17 @@ const App = () => {
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
 
+  const Notification = () => {
+    return (
+      <div style={{border: 2 + "px solid #F00"}}>{notification}</div>
+    )
+  }
+
   return (
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
+      {notification ? <Notification /> : null}
       <Switch>
         <Route path="/anecdote/:id">
           <Anecdote list={anecdotes} />
