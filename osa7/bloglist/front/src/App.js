@@ -8,13 +8,14 @@ import {
 import { blogService, loginService } from './services'
 import { useSelector, useDispatch } from 'react-redux'
 import { notifyWith } from './reducers/notificationReducer'
+import { initBlogs, createBlog } from './reducers/blogReducer'
 
 const App = () => {
   const dispatch = useDispatch()
 
-  const message = useSelector(state => state)
+  const blogs = useSelector(state => state.blogs)
+  const message = useSelector(state => state.notification)
 
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -22,10 +23,8 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
-  }, [])
+    dispatch(initBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -62,19 +61,6 @@ const App = () => {
     window.localStorage.clear()
     setUser(null)
     dispatch(notifyWith('Logged out successfully'))
-  }
-
-  const addBlog = (blogObject) => {
-    blogService
-      .create(blogObject)
-      .then(response => {
-        setBlogs(blogs.concat(response))
-        dispatch(notifyWith(`A new blog ${response.title} has been added`))
-        blogFormRef.current.toggleVisibility()
-      })
-      .catch(exception => {
-        dispatch(notifyWith(`Oops, ${exception.response.data.error}`, 'error'))
-      })
   }
 
   const likeBlog = (blogObject) => {
@@ -147,7 +133,12 @@ const App = () => {
 
   const blogForm = () => (
     <Togglable showLabel="Add new blog" ref={blogFormRef}>
-      <BlogForm addNewBlog={addBlog}/>
+      <BlogForm 
+        addNewBlog={(obj) => {
+          dispatch(createBlog(obj))
+          blogFormRef.current.toggleVisibility()
+        }}
+      />
     </Togglable>
   )
 

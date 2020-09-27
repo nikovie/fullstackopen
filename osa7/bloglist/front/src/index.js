@@ -1,18 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
-import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
-import { composeWithDevTools } from 'redux-devtools-extension'
-import thunk from 'redux-thunk'
-import notificationReducer from './reducers/notificationReducer'
-
-const store = createStore(
-  notificationReducer,
-  composeWithDevTools(
-    applyMiddleware(thunk)
-  )
-)
+import store from './store'
 
 ReactDOM.render(
   <Provider store={store}>
