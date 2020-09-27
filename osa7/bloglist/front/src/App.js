@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
-import Notification from './components/Notication'
-import BlogForm from './components/BlogForm'
-import Togglable from './components/Togglable'
-import blogService from './services/blogs'
-import loginService from './services/login'
-
+import {
+  Blog, 
+  BlogForm,
+  Notification,
+  Togglable
+} from './components'
+import { blogService, loginService } from './services'
 import { useSelector, useDispatch } from 'react-redux'
 import { notifyWith } from './reducers/notificationReducer'
 
