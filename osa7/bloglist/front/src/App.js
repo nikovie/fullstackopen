@@ -6,9 +6,15 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+import { useSelector, useDispatch } from 'react-redux'
+import { notifyWith } from './reducers/notificationReducer'
+
 const App = () => {
+  const dispatch = useDispatch()
+
+  const message = useSelector(state => state)
+
   const [blogs, setBlogs] = useState([])
-  const [message, setMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -30,13 +36,6 @@ const App = () => {
     }
   }, [])
 
-  const notifyWith = (message, type='success') => {
-    setMessage({ message, type })
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000)
-  }
-
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -55,14 +54,14 @@ const App = () => {
       setPassword('')
     }
     catch (exception) {
-      notifyWith(`Oops, ${exception.response.data.error}`, 'error')
+      dispatch(notifyWith(`Oops, ${exception.response.data.error}`, 'error'))
     }
   }
 
   const handleLogout = () => {
     window.localStorage.clear()
     setUser(null)
-    notifyWith('Logged out successfully')
+    dispatch(notifyWith('Logged out successfully'))
   }
 
   const addBlog = (blogObject) => {
@@ -70,11 +69,11 @@ const App = () => {
       .create(blogObject)
       .then(response => {
         setBlogs(blogs.concat(response))
-        notifyWith(`A new blog ${response.title} has been added`)
+        dispatch(notifyWith(`A new blog ${response.title} has been added`))
         blogFormRef.current.toggleVisibility()
       })
       .catch(exception => {
-        notifyWith(`Oops, ${exception.response.data.error}`, 'error')
+        dispatch(notifyWith(`Oops, ${exception.response.data.error}`, 'error'))
       })
   }
 
@@ -90,10 +89,10 @@ const App = () => {
     blogService
       .update(blogObject.id, updateBlog)
       .then(response => {
-        notifyWith(`Added +1 to ${response.title}`)
+        dispatch(notifyWith(`Added +1 to ${response.title}`))
       })
       .catch(exception => {
-        notifyWith(`Oops, ${exception.response.data.error}`, 'error')
+        dispatch(notifyWith(`Oops, ${exception.response.data.error}`, 'error'))
       })
   }
 
@@ -101,10 +100,10 @@ const App = () => {
     if (window.confirm(`Are you sure to delete ${title}`)) {
       blogService
         .remove(id)
-        .then(notifyWith('Blog removed'))
+        .then(dispatch(notifyWith('Blog removed')))
         .catch(exception => {
           console.log('err', exception.response.data.error)
-          notifyWith(`Oops, ${exception.response.data.error}`, 'error')
+          dispatch(notifyWith(`Oops, ${exception.response.data.error}`, 'error'))
         })
     }
   }
