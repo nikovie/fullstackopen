@@ -8,7 +8,7 @@ import {
 import { blogService, loginService } from './services'
 import { useSelector, useDispatch } from 'react-redux'
 import { notifyWith } from './reducers/notificationReducer'
-import { initBlogs, createBlog } from './reducers/blogReducer'
+import { initBlogs, createBlog, likeBlog, removeBlog } from './reducers/blogReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -63,37 +63,6 @@ const App = () => {
     dispatch(notifyWith('Logged out successfully'))
   }
 
-  const likeBlog = (blogObject) => {
-    const updateBlog = {
-      user: blogObject.user.id,
-      likes: blogObject.likes,
-      author: blogObject.author,
-      title: blogObject.title,
-      url: blogObject.url
-    }
-
-    blogService
-      .update(blogObject.id, updateBlog)
-      .then(response => {
-        dispatch(notifyWith(`Added +1 to ${response.title}`))
-      })
-      .catch(exception => {
-        dispatch(notifyWith(`Oops, ${exception.response.data.error}`, 'error'))
-      })
-  }
-
-  const removeBlog = (title, id) => {
-    if (window.confirm(`Are you sure to delete ${title}`)) {
-      blogService
-        .remove(id)
-        .then(dispatch(notifyWith('Blog removed')))
-        .catch(exception => {
-          console.log('err', exception.response.data.error)
-          dispatch(notifyWith(`Oops, ${exception.response.data.error}`, 'error'))
-        })
-    }
-  }
-
   const loginForm = () => (
     <>
       <form id="loginForm" onSubmit={handleLogin}>
@@ -125,7 +94,15 @@ const App = () => {
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map(blog =>
-          <Blog key={blog.id} blog={blog} likeBlog={likeBlog} removeBlog={removeBlog} user={user} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            likeBlog={(blog) =>
+              dispatch(likeBlog(blog))
+            }
+            removeBlog={(blog) => dispatch(removeBlog(blog.title, blog.id))}
+            user={user}
+          />
         )
       }
     </div>
