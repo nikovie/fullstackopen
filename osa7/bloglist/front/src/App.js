@@ -5,9 +5,8 @@ import {
   Notification,
   Togglable
 } from './components'
-import { blogService, loginService } from './services'
 import { useSelector, useDispatch } from 'react-redux'
-import { notifyWith } from './reducers/notificationReducer'
+import { userLogin, userLoggedIn, userLogout } from './reducers/userReducer'
 import { initBlogs, createBlog, likeBlog, removeBlog } from './reducers/blogReducer'
 
 const App = () => {
@@ -15,59 +14,35 @@ const App = () => {
 
   const blogs = useSelector(state => state.blogs)
   const message = useSelector(state => state.notification)
+  const user = useSelector(state => state.user)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
 
   const blogFormRef = useRef()
 
   useEffect(() => {
     if (user) {
-    dispatch(initBlogs())
+      dispatch(initBlogs())
     }
   }, [dispatch, user])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
-
-  const handleLogin = async (event) => {
-    event.preventDefault()
-
-    try {
-      const user = await loginService.login({
-        username, password
-      })
-
-      window.localStorage.setItem(
-        'loggedUser', JSON.stringify(user)
-      )
-
-      blogService.setToken(user.token)
-      setUser(user)
-      setUsername('')
-      setPassword('')
-    }
-    catch (exception) {
-      dispatch(notifyWith(`Oops, ${exception.response.data.error}`, 'error'))
-    }
-  }
-
-  const handleLogout = () => {
-    window.localStorage.clear()
-    setUser(null)
-    dispatch(notifyWith('Logged out successfully'))
-  }
+    dispatch(userLoggedIn())
+  }, [dispatch])
 
   const loginForm = () => (
     <>
-      <form id="loginForm" onSubmit={handleLogin}>
+      <form
+        id="loginForm"
+        onSubmit={
+          (event) => {
+            event.preventDefault()
+            dispatch(userLogin(username, password))
+            setUsername('')
+            setPassword('')
+          }
+        }>
         <div>
           Username:
           <input
@@ -99,9 +74,7 @@ const App = () => {
           <Blog
             key={blog.id}
             blog={blog}
-            likeBlog={(blog) =>
-              dispatch(likeBlog(blog))
-            }
+            likeBlog={(blog) => dispatch(likeBlog(blog))}
             removeBlog={(blog) => dispatch(removeBlog(blog.title, blog.id))}
             user={user}
           />
@@ -129,7 +102,7 @@ const App = () => {
         </div>
         <div className="dib fr">
           {user !== null &&
-            <p>{user.name} logged in <button onClick={() => handleLogout()}>logout</button></p>
+            <p>{user.name} logged in <button onClick={() => dispatch(userLogout())}>logout</button></p>
           }
         </div>
       </div>
