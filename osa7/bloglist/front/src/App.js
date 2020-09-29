@@ -23,8 +23,10 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
+    if (user) {
     dispatch(initBlogs())
-  }, [dispatch])
+    }
+  }, [dispatch, user])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
