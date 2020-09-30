@@ -1,7 +1,13 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-const UserBlogs = ({username, blogs}) => {
-  return <tr><td>{username}</td><td>{blogs}</td></tr>
+const UserBlogs = ({username, blogs, id}) => {
+  return (
+    <tr>
+      <td><Link to={`/users/${id}`}>{username}</Link></td>
+      <td>{blogs}</td>
+    </tr>
+  )
 }
 
 const UserList = ({users}) => {
@@ -15,6 +21,7 @@ const UserList = ({users}) => {
           .map(user =>
             <UserBlogs
               key={user.id}
+              id={user.id}
               username={user.username}
               blogs={user.blogs.length}
             />
