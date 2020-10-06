@@ -22,7 +22,7 @@ const UserList = ({users}) => {
             <UserBlogs
               key={user.id}
               id={user.id}
-              username={user.username}
+              username={user.name ? user.name : user.username}
               blogs={user.blogs.length}
             />
           )

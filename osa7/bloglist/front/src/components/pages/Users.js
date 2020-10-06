@@ -10,7 +10,7 @@ const Users = ({ title, users }) => {
 
   return (
     <div>
-      {!users.length ? 'Loading...' : <UserList users={users} />}
+      <UserList users={users} />
     </div>
   )
 }

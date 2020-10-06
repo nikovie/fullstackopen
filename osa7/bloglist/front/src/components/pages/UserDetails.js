@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 const userBlogs = (blogs) => {
   if (!blogs) {
@@ -7,7 +8,7 @@ const userBlogs = (blogs) => {
 
   return (
     <ul>
-      {blogs.map(blog => <li key={blog.id}>{blog.title}</li>)}
+      {blogs.map(blog => <li key={blog.id}><Link to={`/blogs/${blog.id}`}>{blog.title}</Link></li>)}
     </ul>
   )
 }

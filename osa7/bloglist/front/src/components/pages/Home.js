@@ -6,9 +6,9 @@ import {
 } from '../../components'
 import { useSelector, useDispatch } from 'react-redux'
 import { userLogin, userLoggedIn } from '../../reducers/userReducer'
-import { initBlogs, createBlog, likeBlog, removeBlog } from '../../reducers/blogReducer'
+import { createBlog } from '../../reducers/blogReducer'
 
-const Home = () => {
+const Home = ({title}) => {
   const dispatch = useDispatch()
 
   const blogs = useSelector(state => state.blogs)
@@ -20,10 +20,8 @@ const Home = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    if (user) {
-      dispatch(initBlogs())
-    }
-  }, [dispatch, user])
+    title('Blogs')
+  }, [title])
 
   useEffect(() => {
     dispatch(userLoggedIn())
@@ -72,9 +70,6 @@ const Home = () => {
           <Blog
             key={blog.id}
             blog={blog}
-            likeBlog={(blog) => dispatch(likeBlog(blog))}
-            removeBlog={(blog) => dispatch(removeBlog(blog.title, blog.id))}
-            user={user}
           />
         )
       }
