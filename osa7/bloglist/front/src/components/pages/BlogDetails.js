@@ -6,7 +6,7 @@ const BlogDetails = ({blog, likeBlog, removeBlog}) => {
   return (
     <div>
       {!blog 
-        ? 'Loading...' 
+        ? null 
         : <>
           <h2>{blog.title} by {blog.author}</h2>
           <div>

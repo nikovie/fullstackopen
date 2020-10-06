@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 const userBlogs = (blogs) => {
-  if (!blogs) {
+  if (!blogs.length) {
     return 'Nothing here...'
   }
 
@@ -13,7 +13,7 @@ const userBlogs = (blogs) => {
   )
 }
 
-const User = ({ user, title }) => {
+const UserDetails = ({ user, title, blogs }) => {
   useEffect(() => {
     title('Blogs')
   }, [title])
@@ -24,7 +24,7 @@ const User = ({ user, title }) => {
         ? 'Loading...' 
         : <>
           <h2>{`Added by ${user.username}`}</h2>
-          {userBlogs(user.blogs)}
+          {userBlogs(blogs.filter(blog => blog.user.id === user.id))}
         </>
       }
           
@@ -33,4 +33,4 @@ const User = ({ user, title }) => {
   )
 }
 
-export default User
+export default UserDetails

@@ -69,10 +69,10 @@ const App = () => {
               />
             </Route>
             <Route path="/users/:id">
-              <UserDetails title={setTitle} user={matchUser} />
+              <UserDetails title={setTitle} user={matchUser} blogs={blogs} />
             </Route>
             <Route path="/users">
-              <Users title={setTitle} users={userdata} />
+              <Users title={setTitle} users={userdata} blogs={blogs} />
             </Route>
             <Route path="/">
               <Home title={setTitle} />
