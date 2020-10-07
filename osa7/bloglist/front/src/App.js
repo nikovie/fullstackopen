@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { initUsers } from './reducers/userDataReducer'
 import { initBlogs } from './reducers/blogReducer'
 import { likeBlog, removeBlog } from './reducers/blogReducer'
-
+import { userLoggedIn } from './reducers/userReducer'
 import {
   Header,
   Notification
 } from './components'
-
+import Login from './components/pages/Login'
 import Home from './components/pages/Home'
 import Users from './components/pages/Users'
 import UserDetails from './components/pages/UserDetails'
@@ -25,17 +25,17 @@ const App = () => {
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user)
   const userdata = useSelector(state => state.userdata)
-  const [title, setTitle] = useState('Blogs')
+
+  useEffect(() => {
+    dispatch(userLoggedIn())
+  }, [dispatch])
 
   useEffect(() => {
     if (user) {
       dispatch(initBlogs())
+      dispatch(initUsers())
     }
   }, [dispatch, user])
-
-  useEffect(() => {
-    dispatch(initUsers())
-  }, [dispatch])
 
   const userMatch = useRouteMatch('/users/:id')
   const matchUser = userMatch
@@ -48,14 +48,14 @@ const App = () => {
     : null
 
   return (
-    <div>
-      <Header title={title} user={user} />
+    <div className="container">
+      <Header user={user} />
       <Notification notification={message}/>
       <div className="ma2">
         {user === null ?
           <Switch>
             <Route path="/">
-              <Home title={setTitle} />
+              <Login />
             </Route>
           </Switch>
           :
@@ -69,13 +69,13 @@ const App = () => {
               />
             </Route>
             <Route path="/users/:id">
-              <UserDetails title={setTitle} user={matchUser} blogs={blogs} />
+              <UserDetails user={matchUser} blogs={blogs} />
             </Route>
             <Route path="/users">
-              <Users title={setTitle} users={userdata} blogs={blogs} />
+              <Users users={userdata} blogs={blogs} />
             </Route>
             <Route path="/">
-              <Home title={setTitle} />
+              <Home />
             </Route>
           </Switch>
         }

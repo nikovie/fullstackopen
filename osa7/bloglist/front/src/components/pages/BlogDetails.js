@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { addComment } from '../../reducers/blogReducer'
+import { Badge, Button, Form, ListGroup } from 'react-bootstrap'
 
 const BlogDetails = ({blog, likeBlog, removeBlog}) => {
   const dispatch = useDispatch()
@@ -19,45 +20,62 @@ const BlogDetails = ({blog, likeBlog, removeBlog}) => {
         ? null 
         : <>
           <h2>{blog.title} by {blog.author}</h2>
-          <div>
-            <div className="dib">{blog.url}</div>
-            {blog.user &&
-              blog.user.username === user.username &&
-              <div className="dib fr">
-                <button
-                  className="fr"
-                  onClick={() => removeBlog(blog)}
-                >Remove</button>
+          <div className="ml3">
+            <div>
+              <div className="dib f4">
+                <Badge pill variant="info">URL</Badge>
+                <span className="ml2">{blog.url}</span>
               </div>
-            }
+              {blog.user &&
+                blog.user.username === user.username &&
+                <div className="dib fr">
+                  <Button
+                    className="fr"
+                    onClick={() => removeBlog(blog)}
+                    variant="danger"
+                    size="sm"
+                  >Remove</Button>
+                </div>
+              }
+            </div>
+            <div className="f4">
+              <span className="mr2">Likes:</span>
+              <Badge pill variant="info">{blog.likes === null ? 0 : `${blog.likes}`}</Badge>
+              <Button
+                onClick={() =>
+                  likeBlog({
+                    ...blog, 
+                    likes: blog.likes === null ? 0 : blog.likes + 1,
+                    user: blog.user.id
+                  })
+                }
+                variant="info"
+                size="sm"
+                className="ml2"
+              >
+                Like
+              </Button>
+            </div>
+            <div className="mt1 mb2">
+              <span className="i f6">added by {blog.user.name ? blog.user.name : blog.user.username}</span>
+            </div>
           </div>
-          <div>
-            Likes: {blog.likes === null ? 0 : `${blog.likes}`}
-            <button
-              onClick={() =>
-                likeBlog({
-                  ...blog, 
-                  likes: blog.likes === null ? 0 : blog.likes + 1,
-                  user: blog.user.id
-                })
-              }>Like</button>
-          </div>
-          <div>added by {blog.user.name ? blog.user.name : blog.user.username}</div>
+          
           <div>
             <h3>Comments</h3>
-            <form onSubmit={addNewComment}>
-              <input type="text" name="commentField" />
-              <button type="submit">Add comment</button>
-            </form>
+            <Form onSubmit={addNewComment} inline>
+              <Form.Control type="text" name="commentField" />
+              <Button type="submit">Add comment</Button>
+            </Form>
             {!comments
               ? null
-              : <ul>
+              : <ListGroup className="mt4">
                 {comments
                   .map(comment =>
-                    <li key={comment.id}>{comment.comment}</li>
+                    <ListGroup.Item key={comment.id}>{comment.comment}</ListGroup.Item>
                   )
                 }
-              </ul>
+              </ListGroup>
             }
           </div>
           

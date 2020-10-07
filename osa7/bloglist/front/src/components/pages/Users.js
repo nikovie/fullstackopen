@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 
 const UserBlogs = ({username, blogs, id}) => {
@@ -10,11 +10,7 @@ const UserBlogs = ({username, blogs, id}) => {
   )
 }
 
-const Users = ({ title, users, blogs }) => {
-  useEffect(() => {
-    title('Users')
-  }, [title])
-
+const Users = ({ users, blogs }) => {
   return (
     <table>
       <thead> 

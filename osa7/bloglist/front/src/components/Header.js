@@ -2,26 +2,35 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { userLogout } from '../reducers/userReducer'
+import { Navbar, Nav, Button } from 'react-bootstrap'
 
-const Header = ({ title, user }) => {
+const Header = ({ user }) => {
   const dispatch = useDispatch()
   return (
-    <div className="bg-gray ph2">
-      <div className="dib">
-        <h1>{title}</h1>
-      </div>
-      <div className="dib fr">
+    <Navbar bg="light-gray" expand="md">
+      <Navbar.Brand>Bloglist</Navbar.Brand>
+      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+      <Navbar.Collapse id="responsive-navbar-nav">
+        <Nav className="mr-auto" >
+          <Nav.Link href="#" as="span">
+            <Link to="/" className="menuItem">Blogs</Link>
+          </Nav.Link>
+          <Nav.Link href="#" as="span">
+            <Link to="/users" className="menuItem">Users</Link>
+          </Nav.Link>
+          <Nav.Link href="#" as="span" className="d-md-none">
+            <Link to="/" className="menuItem">Logout</Link>
+          </Nav.Link>
+        </Nav>
+        
         {user !== null &&
-          <p>{user.name} logged in <button onClick={() => dispatch(userLogout())}>logout</button></p>
+          <Nav className="d-none d-md-block">
+            <span className="pr1">{user.name} logged in</span>
+            <Button onClick={() => dispatch(userLogout())} variant="outline-dark" size="sm">logout</Button>
+          </Nav>
         }
-      </div>
-      <div className="menu">
-      <nav>
-        <Link to="/" className="menuItem">Blogs</Link>
-        <Link to="/users" className="menuItem">Users</Link>
-      </nav>
-      </div>
-    </div>
+      </Navbar.Collapse>
+    </Navbar>
   )
 }
 

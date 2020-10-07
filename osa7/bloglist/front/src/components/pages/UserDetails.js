@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 
 const userBlogs = (blogs) => {
@@ -13,11 +13,7 @@ const userBlogs = (blogs) => {
   )
 }
 
-const UserDetails = ({ user, title, blogs }) => {
-  useEffect(() => {
-    title('Blogs')
-  }, [title])
-
+const UserDetails = ({ user, blogs }) => {
   return (
     <div>
       {!user 
