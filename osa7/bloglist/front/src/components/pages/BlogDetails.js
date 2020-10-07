@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 
 const BlogDetails = ({blog, likeBlog, removeBlog}) => {
   const user = useSelector(state => state.user)
+  const comments = blog && blog.comments ? blog.comments : null
   return (
     <div>
       {!blog 
@@ -33,6 +34,19 @@ const BlogDetails = ({blog, likeBlog, removeBlog}) => {
               }>Like</button>
           </div>
           <div>added by {blog.user.name ? blog.user.name : blog.user.username}</div>
+          {!comments
+            ? null
+            : <div>
+              <h3>Comments</h3>
+              <ul>
+                {comments
+                  .map(comment =>
+                    <li key={comment.id}>{comment.comment}</li>
+                  )
+                }
+              </ul>
+            </div>
+          }
         </>
       }
     </div>
