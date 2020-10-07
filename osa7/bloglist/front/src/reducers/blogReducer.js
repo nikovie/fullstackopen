@@ -12,6 +12,12 @@ const blogReducer = (state = [], action) => {
       const blogToLike = state.find(blog => blog.id === id)
       const likedBlog = {...blogToLike, likes: blogToLike.likes + 1}
       return state.map(blog => blog.id !== id ? blog : likedBlog)
+    case 'COMMENT_BLOG':
+      const blogId = action.data.blog.id
+      const blogToComment = state.find(blog => blog.id === blogId)
+      const addNew = [ ...blogToComment.comments, { comment: action.data.comment, id: action.data.id } ]
+      const commentedBlog = { ...blogToComment, comments: addNew }
+      return state.map(blog => blog.id !== blogId ? blog : commentedBlog)
     case 'REMOVE_BLOG': 
       const deletedBlog = state.find(blog => blog.id === action.id)
       return state.filter(blog => blog !== deletedBlog)
@@ -37,18 +43,28 @@ export const createBlog = (blogObject) => {
       type: 'CREATE_BLOG',
       data: newBlog
     })
-    dispatch(notifyWith(`A new blog "${newBlog.title}" has been added`))
+    dispatch(notifyWith(`A new blog "${newBlog.title}" has been added`))    
   }
 }
 
 export const likeBlog = (blog) => {
   return async dispatch => {
-    const blogToLike = await blogService.update(blog)
+    const blogToLike = await blogService.addLike(blog)
     dispatch({
       type: 'LIKE_BLOG',
       data: blogToLike
     })
     dispatch(notifyWith(`Added +1 to "${blogToLike.title}"`))
+  }
+}
+
+export const addComment = (comment, id) => {
+  return async dispatch => {
+    const newComment = await blogService.addComment(comment, id)
+    dispatch({
+      type: 'COMMENT_BLOG',
+      data: newComment
+    })
   }
 }
 

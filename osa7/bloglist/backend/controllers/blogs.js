@@ -31,10 +31,9 @@ router.delete('/:id', async (request, response) => {
   response.status(204).end()
 })
 
-router.put('/:id', async (request, response) => {
-  const blog = request.body
-
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+router.patch('/:id', async (request, response) => {
+  const body = request.body
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, body)
   response.json(updatedBlog.toJSON())
 })
 

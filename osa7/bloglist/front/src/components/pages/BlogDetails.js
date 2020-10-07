@@ -1,9 +1,18 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { addComment } from '../../reducers/blogReducer'
 
 const BlogDetails = ({blog, likeBlog, removeBlog}) => {
+  const dispatch = useDispatch()
   const user = useSelector(state => state.user)
   const comments = blog && blog.comments ? blog.comments : null
+
+  const addNewComment = (event) => {
+    event.preventDefault()
+    const comment = { comment: event.target.commentField.value }
+    event.target.commentField.value = null
+    dispatch(addComment(comment, blog.id))
+  }
   return (
     <div>
       {!blog 
@@ -34,19 +43,24 @@ const BlogDetails = ({blog, likeBlog, removeBlog}) => {
               }>Like</button>
           </div>
           <div>added by {blog.user.name ? blog.user.name : blog.user.username}</div>
-          {!comments
-            ? null
-            : <div>
-              <h3>Comments</h3>
-              <ul>
+          <div>
+            <h3>Comments</h3>
+            <form onSubmit={addNewComment}>
+              <input type="text" name="commentField" />
+              <button type="submit">Add comment</button>
+            </form>
+            {!comments
+              ? null
+              : <ul>
                 {comments
                   .map(comment =>
                     <li key={comment.id}>{comment.comment}</li>
                   )
                 }
               </ul>
-            </div>
-          }
+            }
+          </div>
+          
         </>
       }
     </div>
